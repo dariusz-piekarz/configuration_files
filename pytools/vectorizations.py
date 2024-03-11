@@ -6,6 +6,15 @@ from datetime import datetime
 
 
 def vectorize(fun):
+    """
+    This function takes a function and returns a new function that applies
+    the original function to all elements of a data structure that are of a basic data type
+    (int, float, str, etc.).
+    The new function also handles nested data structures such as
+    lists, tuples, sets, dictionaries, and NumPy arrays.
+    :param fun: a function to be vectorized
+    :return: a function that applies the original function to all elements of a data structure that are of a basic data type
+    """
     @logger.catch
     @wraps(fun)
     def to_vectorize(obj):
