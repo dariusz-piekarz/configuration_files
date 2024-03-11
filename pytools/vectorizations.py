@@ -7,12 +7,12 @@ from datetime import datetime
 
 def vectorize(fun):
     """
-    This function takes a function and returns a new function that applies
+    This decorator takes a function of one variable and returns a new function that applies
     the original function to all elements of a data structure that are of a basic data type
     (int, float, str, etc.).
     The new function also handles nested data structures such as
     lists, tuples, sets, dictionaries, and NumPy arrays.
-    :param fun: a function to be vectorized
+    :param fun: a function of one variable to be vectorized
     :return: a function that applies the original function to all elements of a data structure that are of a basic data type
     """
     @logger.catch
@@ -62,6 +62,15 @@ def vectorize(fun):
 
 
 def vectorize_param(fun):
+    """
+    This decorator takes a function of one variable and returns a new function that applies
+    the original function to all elements of a data structure that are of a basic data type
+    (int, float, str, etc.). The function allows to have uniform parameters (**params).
+    The new function also handles nested data structures such as
+    lists, tuples, sets, dictionaries, and NumPy arrays.
+    :param fun: a function of one variable (+ **params parameters) to be vectorized
+    :return: a function that applies the original function to all elements of a data structure that are of a basic data type
+    """
     @logger.catch
     @wraps(fun)
     def to_vectorize(obj, **params):
@@ -109,6 +118,15 @@ def vectorize_param(fun):
 
 
 def vectorize_multi(fun):
+    """
+    This decorator takes a function of *objects variables and returns a new function that applies
+    the original function to all elements of a data structure that are of a basic data type
+    (int, float, str, etc.).
+    The new function also handles nested data structures such as
+    lists, tuples, sets, dictionaries, and NumPy arrays.
+    :param fun: a function of *objects variables to be vectorized
+    :return: a function that applies the original function to all elements of a data structure that are of a basic data type
+    """
     @logger.catch
     @wraps(fun)
     def to_vectorize(*objects):
@@ -185,6 +203,15 @@ def vectorize_multi(fun):
 
 
 def vectorize_multi_param(fun):
+    """
+     This decorator takes a function of *objects variable and returns a new function that applies
+     the original function to all elements of a data structure that are of a basic data type
+     (int, float, str, etc.). The function allows to have uniform parameters (**params).
+     The new function also handles nested data structures such as
+     lists, tuples, sets, dictionaries, and NumPy arrays.
+     :param fun: a function of *objects variables (+ **params parameters) to be vectorized
+     :return: a function that applies the original function to all elements of a data structure that are of a basic data type
+     """
     @logger.catch
     @wraps(fun)
     def to_vectorize(*objects, **params):
