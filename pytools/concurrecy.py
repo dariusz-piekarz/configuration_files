@@ -44,8 +44,8 @@ def locker(lock: bool = False, own_lock: bool = False) -> callable:
     Returns
     -------
     outer_wrapper : function
-        A function that wraps the original function and applies the locking or unlocking behavior
-        based on the `lock` parameter.
+        A function that wraps the original function and applies the locking or unlocking behavior based on the
+        `lock` parameter.
 
     Examples
     --------
