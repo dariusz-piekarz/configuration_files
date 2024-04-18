@@ -29,7 +29,7 @@ def div_to_subsets(set_to_partition: list[any], length_of_subset: int) -> list[l
     return [set_to_partition[i: i + length_of_subset] for i in range(0, len(set_to_partition), length_of_subset)]
 
 
-def locker(lock: bool = False, own_lock: bool = False):
+def locker(lock: bool = False, own_lock: bool = False) -> callable:
     """
     This function is a decorator that can be used to lock or unlock a function.
 
@@ -66,9 +66,9 @@ def locker(lock: bool = False, own_lock: bool = False):
     The `locker` decorator can be used to ensure that a function is executed in a thread-safe manner,
     preventing race conditions or other concurrency issues.
     """
-    def outer_wrapper(function: callable):
+    def outer_wrapper(function: callable) -> callable:
         @wraps(function)
-        def inner_wrapper(*args, **kwargs):
+        def inner_wrapper(*args, **kwargs) -> any:
             if not own_lock:
                 del kwargs['mutex']
 
@@ -143,7 +143,7 @@ def concurrency_manager(engine: str = 'thread', lock: bool = False, own_lock: bo
                 return {key: result.result() for key, result in zip(args.keys(), results)}
 
             elif engine == 'async':
-                async def async_inner_wrap():
+                async def async_inner_wrap() -> dict[str: any]:
                     coros = []
                     if kwargs is not None:
                         if args.keys() != kwargs.keys():
@@ -222,7 +222,7 @@ class ConcurrencyManager:
 
     @time_decor
     def concurrency_manager(self, args: dict[str: tuple[any]] | dict[str: dict[str: any]],
-                                  kwargs: dict[str: dict[str: any]] | None = None):
+                                  kwargs: dict[str: dict[str: any]] | None = None) -> dict[str: any]:
 
         if (args is not None and kwargs is None) or (
                 isinstance(args, dict) and isinstance(kwargs, dict) and args.keys() == kwargs.keys()):
@@ -297,7 +297,7 @@ class ConcurrencyManager:
             self.mutex.release()
 
     async def async_root(self, args: dict[str, tuple[any]] | None = None,
-                         kwargs: dict[str, dict[str, any]] | None = None):
+                         kwargs: dict[str, dict[str, any]] | None = None) -> None:
 
         functions = [self.single_async(args[key] if args is not None else None,
                                               kwargs[key] if kwargs is not None else None)
@@ -307,7 +307,7 @@ class ConcurrencyManager:
         keys = list(args.keys() if args is not None else kwargs.keys())
         self.shared_data = {keys[i]: results[i] for i in range(len(keys))}
 
-    async def single_async(self, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None):
+    async def single_async(self, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None) -> any:
         if isinstance(args, tuple) and isinstance(kwargs, dict):
             return await self.function(*args, **kwargs)
         else:
@@ -382,7 +382,7 @@ class MultifunctionsConcurrencyManager:
 
     @time_decor
     def concurrency_manager(self, args: dict[str: tuple[any]] | dict[str: dict[str: any]],
-                                  kwargs: dict[str: dict[str: any]] | None = None):
+                                  kwargs: dict[str: dict[str: any]] | None = None) -> dict[str: any]:
 
         if (args is not None and kwargs is None and args.keys() == self.functions.keys()) or (
                 isinstance(args, dict) and isinstance(kwargs, dict) and args.keys() == kwargs.keys()
@@ -458,7 +458,7 @@ class MultifunctionsConcurrencyManager:
             self.mutex.release()
 
     async def async_root(self, args: dict[str, tuple[any]] | None = None,
-                               kwargs: dict[str, dict[str, any]] | None = None):
+                               kwargs: dict[str, dict[str, any]] | None = None) -> None:
 
         functions = [self.single_async(self.functions[key], args[key] if args is not None else None,
                                                             kwargs[key] if kwargs is not None else None)
@@ -468,7 +468,8 @@ class MultifunctionsConcurrencyManager:
         keys = list(args.keys() if args is not None else kwargs.keys())
         self.shared_data = {keys[i]: results[i] for i in range(len(keys))}
 
-    async def single_async(self, function: callable, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None):
+    async def single_async(self, function: callable, args: tuple[any] | dict[str: any],
+                                                     kwargs: dict[str: any] | None) -> any:
         if isinstance(args, tuple) and isinstance(kwargs, dict):
             return await function(*args, **kwargs)
         else:
@@ -482,7 +483,7 @@ def read_csv_file(path: str, *args, **kwargs) -> DataFrame:
     return read_csv(path,  *args, **kwargs)
 
 
-def save_to_csv(df: DataFrame, path: str,  *args, **kwargs):
+def save_to_csv(df: DataFrame, path: str,  *args, **kwargs) -> None:
     df.to_csv(path,  *args, **kwargs)
 
 
@@ -492,7 +493,7 @@ async def read_csv_file_async(path: str, *args, **kwargs) -> DataFrame:
         return read_csv(BytesIO(content),  *args, **kwargs)
 
 
-async def save_to_csv_async(df: DataFrame, path: str, *args, **kwargs):
+async def save_to_csv_async(df: DataFrame, path: str, *args, **kwargs) -> None:
 
     bytes_buffer = BytesIO()
     df.to_csv(bytes_buffer, *args, **kwargs)
