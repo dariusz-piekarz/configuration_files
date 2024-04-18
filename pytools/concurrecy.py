@@ -1,13 +1,14 @@
-from pandas import DataFrame, read_csv
+
 from multiprocessing import Process, Lock as MLock, Manager, cpu_count
+from concurrent.futures import ThreadPoolExecutor
 from threading import Thread, Lock as TLock
-from io import BytesIO
 from asyncio import gather, run
+from pandas import DataFrame, read_csv
+from io import BytesIO
 from typing import Union
 from aiofiles import open
-from metaclass import time_decor
-from concurrent.futures import ThreadPoolExecutor
 from functools import wraps
+from metaclass import time_decor
 
 
 def div_to_subsets(set_to_partition: list[any], length_of_subset: int) -> list[list[any]]:
@@ -29,19 +30,23 @@ def div_to_subsets(set_to_partition: list[any], length_of_subset: int) -> list[l
     return [set_to_partition[i: i + length_of_subset] for i in range(0, len(set_to_partition), length_of_subset)]
 
 
-def locker(lock: bool = False):
+def locker(lock: bool = False, own_lock: bool = False):
     """
     This function is a decorator that can be used to lock or unlock a function.
 
     Parameters
     ----------
     lock : bool, optional
-        A boolean value that determines whether the function should be locked or not. If `True`, the function will be locked using a thread lock. If `False`, the function will not be locked.
-
+        A boolean value that determines whether the function should be locked or not. If `True`,
+        the function will be locked using a thread lock. If `False`, the function will not be locked.
+    own_lock : bool, optional:
+        A boolean value which specifies if user wants to use TLock in his own way. If `True`, the function will
+        expect a kwargs variable named 'mutex'.
     Returns
     -------
     outer_wrapper : function
-        A function that wraps the original function and applies the locking or unlocking behavior based on the `lock` parameter.
+        A function that wraps the original function and applies the locking or unlocking behavior
+        based on the `lock` parameter.
 
     Examples
     --------
@@ -59,30 +64,38 @@ def locker(lock: bool = False):
         pass
     ```
 
-    The `locker` decorator can be used to ensure that a function is executed in a thread-safe manner, preventing race conditions or other concurrency issues.
+    The `locker` decorator can be used to ensure that a function is executed in a thread-safe manner,
+    preventing race conditions or other concurrency issues.
     """
     def outer_wrapper(function: callable):
         @wraps(function)
         def inner_wrapper(*args, **kwargs):
-            if lock:
+            new_kwargs = kwargs
+            if not own_lock:
+                del new_kwargs['mutex']
+
+            if lock and not own_lock:
                 with TLock():
-                    return function(*args, **kwargs)
+                    return function(*args, **new_kwargs)
             else:
-                return function(*args, **kwargs)
+                return function(*args, **new_kwargs)
         return inner_wrapper
     return outer_wrapper
 
 
-def concurrency_manager(engine: str = 'thread', lock: bool = False) -> callable:
+def concurrency_manager(engine: str = 'thread', lock: bool = False, own_lock: bool = False) -> callable:
     """
     A decorator that allows the user to execute a function in a concurrent manner.
 
     Parameters:
     engine (str): The type of concurrency engine to be used. Supported values are 'thread' and 'async'.
     lock (bool): A boolean value that determines whether the function should be locked or not.
-
+    own_lock : bool, optional:
+        A boolean value which specifies if user wants to use TLock in his own way. If `True`, the function will
+        expect a kwargs variable named 'mutex'.
     Returns:
-    callable: A function that wraps the original function and applies the locking or unlocking behavior based on the `lock` parameter.
+    callable: A function that wraps the original function and applies the locking or unlocking behavior based on the
+     `lock` and 'own_lock' parameters.
 
     Examples:
     Here is an example of how to use the `concurrency_manager` decorator:
@@ -94,7 +107,8 @@ def concurrency_manager(engine: str = 'thread', lock: bool = False) -> callable:
         pass
     ```
 
-    The `concurrency_manager` decorator can be used to ensure that a function is executed in a thread-safe manner, preventing race conditions or other concurrency issues.
+    The `concurrency_manager` decorator can be used to ensure that a function is executed in a thread-safe manner,
+    preventing race conditions or other concurrency issues.
     """
     def outer_wrap(function: callable) -> callable:
 
@@ -109,20 +123,25 @@ def concurrency_manager(engine: str = 'thread', lock: bool = False) -> callable:
                 raise ValueError("You must provide arguments!")
 
             if engine == 'thread':
+                mutex = None
+                if own_lock:
+                    mutex = TLock()
+
                 with ThreadPoolExecutor() as executor:
                     if kwargs is not None:
                         if args.keys() != kwargs.keys():
                             raise ValueError("args and kwargs must have the same keys!")
 
-                        results = [executor.submit(locker(lock)(function), *args[key], **kwargs[key])
-                                   for key in args.keys()]
+                        results = [executor.submit(locker(lock, own_lock)(function), *args[key], **kwargs[key],
+                                                   mutex=mutex) for key in args.keys()]
 
                     elif isinstance(list(args.values())[0], tuple):
-                        results = [executor.submit(locker(lock)(function), *args[key]) for key in args.keys()]
+                        results = [executor.submit(locker(lock, own_lock)(function), *args[key], mutex=mutex)
+                                   for key in args.keys()]
 
                     elif isinstance(list(args.values())[0], dict):
-                        results = [executor.submit(locker(lock)(function), **args[key]) for key in args.keys()]
-
+                        results = [executor.submit(locker(lock, own_lock)(function), **args[key], mutex=mutex)
+                                   for key in args.keys()]
                 return {key: result.result() for key, result in zip(args.keys(), results)}
 
             elif engine == 'async':
@@ -154,9 +173,11 @@ class ConcurrencyManager:
         engine (str): The type of concurrency engine to be used. Can be 'thread', 'process', or 'async'.
         mutex (Union[MLock, TLock, None]): A mutex object used to synchronize access to shared resources.
         shared_data (dict | None): A dictionary to store the results of the function execution.
+        own_locker (bool): A boolean value which specifies if user wants to use TLock in his own way.
+         If `True`, the function will expect a kwargs variable named 'mutex'.
 
     Methods:
-        __init__(function: callable, engine: str = 'thread', locker: bool = True):
+        __init__(function: callable, engine: str = 'thread', locker: bool = True, own_locker: bool = False):
             Initialize the ConcurrencyManager instance with the provided function, engine type, and locker status.
 
         concurrency_manager(args: dict[str: tuple[any]] | dict[str: dict[str: any]],
@@ -181,8 +202,9 @@ class ConcurrencyManager:
     engine: str
     function: callable
     share_results: bool
+    own_locker: bool
 
-    def __init__(self, function: callable, engine: str = 'thread', locker: bool = True):
+    def __init__(self, function: callable, engine: str = 'thread', locker: bool = True, own_locker: bool = False):
 
         self.function = function
         if engine in ['thread', 'process', 'async']:
@@ -190,7 +212,9 @@ class ConcurrencyManager:
         else:
             raise ValueError(f'Engine {engine} is not supported.')
 
-        if locker:
+        self.own_locker = own_locker
+
+        if locker or own_locker:
             if engine == 'thread':
                 self.mutex = TLock()
             elif engine == 'process':
@@ -251,18 +275,27 @@ class ConcurrencyManager:
 
     def guard(self, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None, id: str) -> None:
 
-        if self.mutex is not None:
+        if self.mutex is not None and not self.own_locker:
             self.mutex.acquire()
 
         if isinstance(args, tuple) and isinstance(kwargs, dict):
-            self.shared_data[id] = self.function(*args, **kwargs)
+            if self.own_locker:
+                self.shared_data[id] = self.function(*args, **kwargs, mutex=self.mutex)
+            else:
+                self.shared_data[id] = self.function(*args, **kwargs)
         else:
             if isinstance(args, tuple):
-                self.shared_data[id] = self.function(*args)
+                if self.own_locker:
+                    self.shared_data[id] = self.function(*args, mutex=self.mutex)
+                else:
+                    self.shared_data[id] = self.function(*args)
             else:
-                self.shared_data[id] = self.function(**args)
+                if self.own_locker:
+                    self.shared_data[id] = self.function(**args, mutex=self.mutex)
+                else:
+                    self.shared_data[id] = self.function(**args)
 
-        if self.mutex is not None:
+        if self.mutex is not None and not self.own_locker:
             self.mutex.release()
 
     async def async_root(self, args: dict[str, tuple[any]] | None = None,
@@ -287,43 +320,48 @@ class ConcurrencyManager:
 
 
 class MultifunctionsConcurrencyManager:
+    """
+     A class to manage concurrent execution of functions.
+
+     Attributes:
+         functions dict[str: callable]: Functions to be executed concurrently.
+         engine (str): The type of concurrency engine to be used. Can be 'thread', 'process', or 'async'.
+         mutex (Union[MLock, TLock, None]): A mutex object used to synchronize access to shared resources.
+         shared_data (dict | None): A dictionary to store the results of the function execution.
+         own_locker (bool): A boolean value which specifies if user wants to use TLock in his own way.
+                            If `True`, the function will expect a kwargs variable named 'mutex'.
+
+     Methods:
+         __init__(functions: dict[str: callable], engine: str = 'thread', locker: bool = True, own_locker: bool = False):
+             Initialize the ConcurrencyManager instance with the provided functions, engine type, and locker status.
+
+         concurrency_manager(args: dict[str: tuple[any]] | dict[str: dict[str: any]],
+                                   kwargs: dict[str: dict[str: any]] | None = None):
+             Execute the function concurrently with the provided arguments and keywords.
+             The results are stored in the shared_data dictionary.
+
+         guard(args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None, id: str) -> None:
+             Execute the function with the provided arguments and keywords in a thread/process/event,
+             and store the result in the shared_data dictionary.
+
+         async_root(args: dict[str, tuple[any]] | None = None,
+                          kwargs: dict[str, dict[str, any]] | None = None) -> None:
+             Execute the function concurrently with the provided arguments and keywords asynchronously,
+             and store the results in the shared_data dictionary.
+
+         single_async(function: callable, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None) -> Any:
+             Execute the function with the provided arguments and keywords asynchronously, and return the result.
+     """
+
     mutex: Union[MLock, TLock, None]
     shared_data: dict | None = None
     engine: str
     functions: dict[str: callable]
     share_results: bool
-    """
-    A class to manage concurrent execution of functions.
+    own_locker: bool
 
-    Attributes:
-        functions dict[str: callable]: Functions to be executed concurrently.
-        engine (str): The type of concurrency engine to be used. Can be 'thread', 'process', or 'async'.
-        mutex (Union[MLock, TLock, None]): A mutex object used to synchronize access to shared resources.
-        shared_data (dict | None): A dictionary to store the results of the function execution.
-
-    Methods:
-        __init__(functions: dict[str: callable], engine: str = 'thread', locker: bool = True):
-            Initialize the ConcurrencyManager instance with the provided functions, engine type, and locker status.
-
-        concurrency_manager(args: dict[str: tuple[any]] | dict[str: dict[str: any]],
-                                  kwargs: dict[str: dict[str: any]] | None = None):
-            Execute the function concurrently with the provided arguments and keywords.
-            The results are stored in the shared_data dictionary.
-
-        guard(args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None, id: str) -> None:
-            Execute the function with the provided arguments and keywords in a thread/process/event,
-            and store the result in the shared_data dictionary.
-
-        async_root(args: dict[str, tuple[any]] | None = None,
-                         kwargs: dict[str, dict[str, any]] | None = None) -> None:
-            Execute the function concurrently with the provided arguments and keywords asynchronously,
-            and store the results in the shared_data dictionary.
-
-        single_async(function: callable, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None) -> Any:
-            Execute the function with the provided arguments and keywords asynchronously, and return the result.
-    """
-
-    def __init__(self, functions: dict[str: callable], engine: str = 'thread', locker: bool = True):
+    def __init__(self, functions: dict[str: callable], engine: str = 'thread', locker: bool = True,
+                 own_locker: bool = False):
 
         if not all([callable(function) for function in functions.values()]) or not isinstance(functions, dict):
             raise TypeError("functions must be callables, and provided as dict!")
@@ -334,7 +372,9 @@ class MultifunctionsConcurrencyManager:
         else:
             raise ValueError(f'Engine {engine} is not supported.')
 
-        if locker:
+        self.own_locker = own_locker
+
+        if locker or own_locker:
             if engine == 'thread':
                 self.mutex = TLock()
             elif engine == 'process':
@@ -396,18 +436,27 @@ class MultifunctionsConcurrencyManager:
 
     def guard(self, args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None, id: str) -> None:
 
-        if self.mutex is not None:
+        if self.mutex is not None and not self.own_locker:
             self.mutex.acquire()
 
         if isinstance(args, tuple) and isinstance(kwargs, dict):
-            self.shared_data[id] = self.functions[id](*args, **kwargs)
+            if self.own_locker:
+                self.shared_data[id] = self.functions[id](*args, **kwargs, mutex=self.mutex)
+            else:
+                self.shared_data[id] = self.functions[id](*args, **kwargs)
         else:
             if isinstance(args, tuple):
-                self.shared_data[id] = self.functions[id](*args)
+                if self.own_locker:
+                    self.shared_data[id] = self.functions[id](*args, mutex=self.mutex)
+                else:
+                    self.shared_data[id] = self.functions[id](*args)
             else:
-                self.shared_data[id] = self.functions[id](**args)
+                if self.own_locker:
+                    self.shared_data[id] = self.functions[id](**args, mutex=self.mutex)
+                else:
+                    self.shared_data[id] = self.functions[id](**args)
 
-        if self.mutex is not None:
+        if self.mutex is not None and not self.own_locker:
             self.mutex.release()
 
     async def async_root(self, args: dict[str, tuple[any]] | None = None,
