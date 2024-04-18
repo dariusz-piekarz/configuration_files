@@ -1,4 +1,3 @@
-
 from multiprocessing import Process, Lock as MLock, Manager, cpu_count
 from concurrent.futures import ThreadPoolExecutor
 from threading import Thread, Lock as TLock
@@ -70,15 +69,14 @@ def locker(lock: bool = False, own_lock: bool = False):
     def outer_wrapper(function: callable):
         @wraps(function)
         def inner_wrapper(*args, **kwargs):
-            new_kwargs = kwargs
             if not own_lock:
-                del new_kwargs['mutex']
+                del kwargs['mutex']
 
             if lock and not own_lock:
                 with TLock():
-                    return function(*args, **new_kwargs)
+                    return function(*args, **kwargs)
             else:
-                return function(*args, **new_kwargs)
+                return function(*args, **kwargs)
         return inner_wrapper
     return outer_wrapper
 
