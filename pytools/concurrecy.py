@@ -161,14 +161,17 @@ class ConcurrencyManager:
 
         concurrency_manager(args: dict[str: tuple[any]] | dict[str: dict[str: any]],
                                   kwargs: dict[str: dict[str: any]] | None = None):
-            Execute the function concurrently with the provided arguments and keywords. The results are stored in the shared_data dictionary.
+            Execute the function concurrently with the provided arguments and keywords.
+            The results are stored in the shared_data dictionary.
 
         guard(args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None, id: str) -> None:
-            Execute the function with the provided arguments and keywords in a thread/process/event, and store the result in the shared_data dictionary.
+            Execute the function with the provided arguments and keywords in a thread/process/event,
+            and store the result in the shared_data dictionary.
 
         async_root(args: dict[str, tuple[any]] | None = None,
                          kwargs: dict[str, dict[str, any]] | None = None) -> None:
-            Execute the function concurrently with the provided arguments and keywords asynchronously, and store the results in the shared_data dictionary.
+            Execute the function concurrently with the provided arguments and keywords asynchronously,
+            and store the results in the shared_data dictionary.
 
         single_async(args: tuple[any] | dict[str: any], kwargs: dict[str: any] | None) -> Any:
             Execute the function with the provided arguments and keywords asynchronously, and return the result.
