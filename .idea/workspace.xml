@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6249b2ed-cfe8-4388-ad2d-344ea9373d09" name="Changes" comment="Documentation enhanced.">
+    <list default="true" id="6249b2ed-cfe8-4388-ad2d-344ea9373d09" name="Changes" comment="locker decorator improved.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pytools/concurrecy.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytools/concurrecy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pytools/metaclass.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytools/metaclass.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,14 +21,31 @@
       </list>
     </option>
   </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="pytools/master" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="pytools" />
+        <entry key="$PROJECT_DIR$" value="a662dc1a7183e6130cbb30b6798b92d2ac65c26a" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;dariusz-piekarz&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="a4f145ac-441c-4452-9b81-699c9232de2f" />
+        <option name="url" value="https://github.com/dariusz-piekarz/configuration_files" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/pytools/vectorizations.py" root0="FORCE_HIGHLIGHTING" />
@@ -43,19 +62,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/DXD/PycharmProjects/pytools",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.concurrecy.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.metaclass.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DXD/PycharmProjects/metaclass&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "directory"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="pytools" />
@@ -83,7 +105,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d68999036c7f-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.14475.56" />
+        <option value="bundled-python-sdk-0509580d9d50-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.14494.241" />
       </set>
     </attachedChunks>
   </component>
@@ -104,12 +126,70 @@
       <option name="project" value="LOCAL" />
       <updated>1710118901086</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update documentation.">
+      <option name="closed" value="true" />
+      <created>1710186341099</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710186341099</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Update documentation.">
+      <option name="closed" value="true" />
+      <created>1710187564233</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710187564233</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update documentation.">
+      <option name="closed" value="true" />
+      <created>1710187626103</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710187626104</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Update documentation.">
+      <option name="closed" value="true" />
+      <created>1713404993973</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1713404993973</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Update documentation.">
+      <option name="closed" value="true" />
+      <created>1713405107441</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1713405107441</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Update documentation.">
+      <option name="closed" value="true" />
+      <created>1713409514282</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1713409514282</updated>
+    </task>
+    <task id="LOCAL-00008" summary="locker decorator improved.">
+      <option name="closed" value="true" />
+      <created>1713411958774</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1713411958774</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Documentation enhanced." />
-    <option name="LAST_COMMIT_MESSAGE" value="Documentation enhanced." />
+    <MESSAGE value="Update documentation." />
+    <MESSAGE value="locker decorator improved." />
+    <option name="LAST_COMMIT_MESSAGE" value="locker decorator improved." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

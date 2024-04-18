@@ -141,8 +141,7 @@ class CallBlockerMetaclass(type):
     """
         Metaclass for classes that can have only one instance.
 
-        This metaclass overrides the __call__ method to check if there is only one instance of the class and if so, returns it.
-        If there are multiple instances, a warning is logged and the first instance is returned.
+        This metaclass overrides the __call__ method to check if there exists an instance of the class and if not, create it.
     """
     counter = 0
 
@@ -154,8 +153,7 @@ class CallBlockerMetaclass(type):
         Call the object instance.
 
         This method is called when an instance of the class is called as a function.
-        It checks if there is only one instance of the class and if so, returns it.
-        If there are multiple instances, a warning is logged and the first instance is returned.
+        It checks if there exists an instance of the class and if not, create it.
 
         Parameters
         ----------
@@ -171,12 +169,8 @@ class CallBlockerMetaclass(type):
 
         """
 
-        cls.counter += 1
-        if cls.counter < 2:
+        if CallBlockerMetaclass.counter in [1, 2]:
+            CallBlockerMetaclass.counter = 2
+        elif CallBlockerMetaclass.counter == 0:
+            CallBlockerMetaclass.counter = 1
             return super(CallBlockerMetaclass, cls).__call__(*args, **kwargs)
-        else:
-            logger.warning("Objects from a class possessing CallBlockerMetaclass can have only one instance called!")
-
-
-if __name__ == "__main__":
-    pass
