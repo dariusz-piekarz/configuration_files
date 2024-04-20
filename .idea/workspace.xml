@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6249b2ed-cfe8-4388-ad2d-344ea9373d09" name="Changes" comment="locker decorator improved.">
+    <list default="true" id="6249b2ed-cfe8-4388-ad2d-344ea9373d09" name="Changes" comment="Files location changed.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pytools/concurrecy.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytools/concurrecy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pytools/metaclass.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytools/metaclass.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +29,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -39,14 +36,12 @@
     &quot;assignee&quot;: &quot;dariusz-piekarz&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="a4f145ac-441c-4452-9b81-699c9232de2f" />
-        <option name="url" value="https://github.com/dariusz-piekarz/configuration_files" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/dariusz-piekarz/configuration_files&quot;,
+    &quot;accountId&quot;: &quot;a4f145ac-441c-4452-9b81-699c9232de2f&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/pytools/vectorizations.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -69,8 +64,8 @@
     &quot;Python.metaclass.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DXD/PycharmProjects/metaclass&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DXD/PycharmProjects/FastAPI_pdf&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;ChangesTree.GroupingKeys&quot;: [
@@ -182,23 +177,84 @@
       <option name="project" value="LOCAL" />
       <updated>1713411958774</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="locker decorator improved.">
+      <option name="closed" value="true" />
+      <created>1713450687607</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1713450687607</updated>
+    </task>
+    <task id="LOCAL-00010" summary="locker decorator improved.">
+      <option name="closed" value="true" />
+      <created>1713450788720</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1713450788720</updated>
+    </task>
+    <task id="LOCAL-00011" summary="locker decorator improved.">
+      <option name="closed" value="true" />
+      <created>1713450860381</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1713450860381</updated>
+    </task>
+    <task id="LOCAL-00012" summary="SQL and API connector added.">
+      <option name="closed" value="true" />
+      <created>1713585093264</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1713585093264</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Documentation updated.">
+      <option name="closed" value="true" />
+      <created>1713585151157</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1713585151157</updated>
+    </task>
+    <task id="LOCAL-00014" summary="List of required packages updated.">
+      <option name="closed" value="true" />
+      <created>1713585400860</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1713585400860</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Files location changed.">
+      <option name="closed" value="true" />
+      <created>1713585888744</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1713585888744</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Documentation enhanced." />
     <MESSAGE value="Update documentation." />
     <MESSAGE value="locker decorator improved." />
-    <option name="LAST_COMMIT_MESSAGE" value="locker decorator improved." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="SQL and API connector added." />
+    <MESSAGE value="Documentation updated." />
+    <MESSAGE value="List of required packages updated." />
+    <MESSAGE value="Files location changed." />
+    <option name="LAST_COMMIT_MESSAGE" value="Files location changed." />
   </component>
 </project>
