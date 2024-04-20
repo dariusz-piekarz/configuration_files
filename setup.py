@@ -15,7 +15,6 @@ setup(
                       'pandas>=1.5.0',
                       'loguru>=0.7.2',
                       'numpy>=1.1.0',
-                      'yaml>=0.0.1',
                       'pyodbc>=5.1.0',
                       'psycopg2>=2.9.9',
                       'httpx>=0.27.0'],
