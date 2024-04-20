@@ -21,14 +21,15 @@ class Node:
         """
         Function allows for searching a subNode of a Node by providing its nd_name
         :param name_nd: name of the node you are looking for
-        :param raise_missing: boolean, if True and name_nd branch does not exist, then Error is raised, if False, None is returned.
+        :param raise_missing: boolean, if True and name_nd branch does not exist, then Error is raised, if False,
+               None is returned.
         :return: Node: return branch of supernode named 'name_nd'
         """
         if name_nd in self.__dict__.keys():
             return getattr(self, name_nd)  # if in the scope of Node 'self' is 'name_nd' then returns self
         else:
             for key in self.__dict__.keys():
-                if isinstance(getattr(self, key), Node):  # if subNode of self named 'key' has type Node then recursively the get_node function is called
+                if isinstance(getattr(self, key), Node):  # if sub-Node of self named 'key' has type Node then recursively the get_node function is called
                     temp = getattr(self, key).get_node(name_nd, False)
                     if temp is None:
                         pass
@@ -65,7 +66,8 @@ class Node:
         """
             Returns parent Node of the subNode with a name 'nd_name'
         :param nd_name: string name of the Node you want to get a parent Node
-        :param missing_node: if True and a such branch does not exist, an error is raised, if False, then None is returned
+        :param missing_node: if True and a such branch does not exist, an error is raised, if False,
+               then None is returned
         :return: Node - parent node which has a branch 'nd_name'
         """
         if not isinstance(nd_name, str):
