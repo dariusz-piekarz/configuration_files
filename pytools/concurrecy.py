@@ -7,7 +7,7 @@ from io import BytesIO
 from typing import Union
 from aiofiles import open
 from functools import wraps
-from metaclass import time_decor
+from pytools.metaclass import time_decor
 
 
 def div_to_subsets(set_to_partition: list[any], length_of_subset: int) -> list[list[any]]:
