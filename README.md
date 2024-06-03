@@ -1,6 +1,6 @@
 **pytools Module Overview**
 
-The `pytools` module is a Python package currently under development (however is ready to be installed). It aims to provide a collection of useful functionalities for various purposes. Presently, it comprises three main files:
+The `pytools` module is a Python package currently under development (however is ready to be installed). It aims to provide a collection of useful functionalities for various purposes. Presently, it comprises seven main files:
 
 1. **config**: This file contains tools related to the creation and management of configuration files. It offers functionality to handle both YAML and JSON file formats efficiently.
 
