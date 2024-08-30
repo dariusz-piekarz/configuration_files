@@ -3,7 +3,36 @@ from datetime import datetime
 from loguru import logger
 
 
-def name_decor(fun):
+def documentation(doc: str) -> callable:
+    """
+    This function equipp a function with its documentation provided as a string.
+        
+        Parameters
+        ----------
+        doc: str
+            The function documentation.
+
+        Returns
+        -------
+        function
+            The wrapped function.
+    """
+    if not isinstance(doc, str):
+        raise TypeError(f"'doc' should be a string, got {type(doc)}!")
+        
+    def outer(fun: callable) -> callable:
+        if not callable(fun):
+            raise TypeError(f"'fun' should be callable, got {type(fun)}!")
+        
+        @wraps(fun)
+        def inner(*args, **kwargs) -> any:
+            fun.__doc__ = doc
+            return fun(*args, **kwargs)
+        return inner
+    return outer
+
+
+def name_decor(fun: callable) -> callable:
     """
         This function wraps a function and logs the full name of called function.
 
@@ -18,14 +47,17 @@ def name_decor(fun):
             The wrapped function.
 
         """
+    if not callable(fun):
+        raise TypeError(f"'fun' should be callable, got {type(fun)}!")
+                
     @wraps(fun)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> any:
         logger.info(fun.__qualname__)
         return fun(*args, **kwargs)
     return wrapper
 
 
-def time_decor(fun):
+def time_decor(fun: callable) -> callable:
     """
         This function wraps a function and logs the time it took to execute.
 
@@ -40,6 +72,9 @@ def time_decor(fun):
             The wrapped function.
 
         """
+    if not callable(fun):
+        raise TypeError(f"'fun' should be callable, got {type(fun)}!")
+        
     @wraps(fun)
     def wrapper(*args, **kwargs):
 
@@ -57,7 +92,7 @@ class NameMetaclass(type):
     to decorate the functions that are going to be called. The decorator prints logs with the name
     of executed function.
     """
-    def __new__(cls, clsnames, clsbases, clsdict, *args, **kwargs):
+    def __new__(cls: type, clsnames: tuple, clsbases: tuple, clsdict: dict, *args, **kwargs):
         """
         This method is called when a new class is being created.
 
@@ -95,7 +130,7 @@ class TimeMetaclass(type):
     to decorate the functions that are going to be called.
     The decorator prints time of execution of the called method
     """
-    def __new__(cls, clsnames, clsbases, clsdict):
+    def __new__(cls, clsnames: tuple, clsbases: tuple, clsdict: dict):
         new_cls_dict = clsdict
         for key, val in clsdict.items():
             if callable(val):
