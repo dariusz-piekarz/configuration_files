@@ -1,5 +1,7 @@
 from yaml import dump as ym_dump, safe_load
 from json import dump as js_dump, load
+from dataclasses import dataclass, fields, is_dataclass
+from loguru import logger
 
 
 class Node:
@@ -181,5 +183,41 @@ def to_dictionary(node: Node, nd_name: str = None) -> dict:
     return dt
 
 
-if __name__ == "__main__":
-    pass
+def set_params_to_config(dc: dataclass, dt: dict) -> list:
+    """
+    Assign parameters from a dictionary dt to the dataclass dc.
+
+    :param dc: dataclass - type of class (i.e. not instantion)
+    :param dt: dict - config data in dictionary
+    :return: list - list of fields that instantialize a dataclass dc
+    """
+    ret: list = []
+    for fld in fields(dc):
+        if fld.name not in dt.keys():
+            logger.warning(f"Field {fld.name} in the dataclass {fld.type} did not found! Default value asssigned.")
+            continue
+        if is_dataclass(fld.type):
+            nested_params: list = set_params_to_config(fld.type, dt[fld.name])
+            ret.append(fld.type(*nested_params))
+        else:
+            ret.append(dt[fld.name])
+    return ret
+
+
+def config_to_dataclass(path: str, DataClass: dataclass) -> dataclass:
+    """"
+    Reaads yaml/yml/json file and set transform it to a DataClass object. DataClass must have the same sutructure and fields name as the config file.
+
+    :param path: str - path to the config file (json, yaml or yml file)
+    :param DataClass - class (dataclass) - type of DataClass which templates to the config
+    :return: an instantion of DataClass with parameters read from the json/yaml/yml file.
+    """
+    dt: dict = {}
+    if ".json" in path:
+        with open(path, 'r') as file:
+            dt = load(file)
+    elif ".yaml" in path or ".yml" in path:
+        with open(path, 'r') as file:
+            dt = safe_load(file)
+
+    return DataClass(*set_params_to_config(DataClass, dt))
