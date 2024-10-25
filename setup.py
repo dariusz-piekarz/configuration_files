@@ -17,6 +17,7 @@ setup(
                       'numpy>=1.1.0',
                       'pyodbc>=5.1.0',
                       'psycopg2>=2.9.9',
-                      'httpx>=0.27.0'],
+                      'httpx>=0.27.0'
+                      'dataclasses>=0.6'],
     classifiers=['Programming Language :: Python :: 3', 'Operating System :: OS Independent'],
     )
