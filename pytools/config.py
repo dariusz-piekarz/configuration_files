@@ -221,3 +221,20 @@ def config_to_dataclass(path: str, DataClass: dataclass) -> dataclass:
             dt = safe_load(file)
 
     return DataClass(*set_params_to_config(DataClass, dt))
+
+
+def dataclass_to_dict(dc: dataclass) -> dict:
+    """
+    Transform a dataclass to a dictionary.
+
+    :param dc: dataclass - dataclass to convert
+    :return: dict - dataclass transformed to a dictionary
+    """
+    ret: dict = {}
+    for fld in fields(dc):
+        value = getattr(dc, fld.name)
+        if is_dataclass(value):
+            ret[fld.name] = dataclass_to_dict(value)
+        else:
+            ret[fld.name] = value
+    return ret
