@@ -148,9 +148,9 @@ class Node:
 class Config(Node):
     def __init__(self, path):
         if path[-4:].lower() == 'json':
-            super(Config, self).__init__(load(open(path)))
+            super(Config, self).__init__(load(open(path, encoding='utf-8')))
         elif path[-4:] == 'yaml' or path[-3:] == 'yml':
-            with open(path, 'r') as stream:
+            with open(path, 'r', encoding='utf-8') as stream:
                 super(Config, self).__init__(safe_load(stream))
 
 
@@ -214,10 +214,10 @@ def config_to_dataclass(path: str, DataClass: dataclass) -> dataclass:
     """
     dt: dict = {}
     if ".json" in path:
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             dt = load(file)
     elif ".yaml" in path or ".yml" in path:
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             dt = safe_load(file)
 
     return DataClass(*set_params_to_config(DataClass, dt))
